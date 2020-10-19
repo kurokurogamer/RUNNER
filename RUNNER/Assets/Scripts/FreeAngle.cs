@@ -6,7 +6,7 @@ public class FreeAngle : MonoBehaviour
 {
 
     [SerializeField]
-    Transform CenterOfBalance;  // 重心
+    Transform CenterOfBalance = null;  // 重心
 
     void Start()
     {

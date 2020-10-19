@@ -42,12 +42,13 @@ public class PlayerMove : MonoBehaviour
         }
 
         RaycastHit hit;
-        var isHit = Physics.Raycast(transform.position + (transform.forward * _speed), -transform.up, out hit, 5.0f, _layerMask, QueryTriggerInteraction.Ignore);
+        var isHit = Physics.Raycast(transform.position, -transform.up, out hit, _distance, _layerMask, QueryTriggerInteraction.Ignore);
 
         if (isHit) 
         {
             Debug.Log("回転");
             Vector3 onPlane = Vector3.ProjectOnPlane(transform.forward * _speed, hit.normal);
+            Debug.Log(onPlane);
             transform.rotation = Quaternion.LookRotation(transform.forward, onPlane);
         }
     }
@@ -61,17 +62,30 @@ public class PlayerMove : MonoBehaviour
     private void OnDrawGizmos()
     {
         RaycastHit hit;
+        RaycastHit hitF;
+        var isHit = Physics.Raycast(transform.position, -transform.up, out hit, _distance, _layerMask, QueryTriggerInteraction.Ignore);
+        var isHitF = Physics.Raycast(transform.position, transform.forward, out hitF, _distance, _layerMask, QueryTriggerInteraction.Ignore);
 
-        var isHit = Physics.Raycast(transform.position + (transform.forward * _speed), -transform.up, out hit,5.0f, _layerMask, QueryTriggerInteraction.Ignore);
-        if (isHit)
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawLine(transform.position + (transform.forward * _speed), transform.position + -transform.up * hit.distance + (transform.forward * _speed));
-        }
-        else
-        {
-            Gizmos.color = Color.blue;
-            Gizmos.DrawLine(transform.position + (transform.forward * _speed), transform.position + -transform.up * 5.0f + (transform.forward * _speed));
-        }
-    }
+		if (isHit)
+		{
+			Gizmos.color = Color.red;
+			Gizmos.DrawLine(transform.position, transform.position + -transform.up * hit.distance);
+		}
+		else
+		{
+			Gizmos.color = Color.blue;
+			Gizmos.DrawLine(transform.position, transform.position + -transform.up * _distance);
+		}
+
+		if (isHitF)
+		{
+			Gizmos.color = Color.red;
+			Gizmos.DrawLine(transform.position, transform.position + transform.forward * hitF.distance);
+		}
+		else
+		{
+			Gizmos.color = Color.blue;
+			Gizmos.DrawLine(transform.position, transform.position + transform.forward * _distance);
+		}
+	}
 }
