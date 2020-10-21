@@ -16,6 +16,7 @@ public class PlayerCtl : MonoBehaviour
 
     // 入力情報
     private Vector2 _Axis;
+    Vector3 vec = Vector3.zero;
 
     // Start is called before the first frame update
     void Start()
@@ -49,7 +50,7 @@ public class PlayerCtl : MonoBehaviour
         if (_Axis.x != 0 || _Axis.y != 0)
         {
             _blur.Strength = Mathf.MoveTowards(_blur.Strength, 0.2f, Time.deltaTime);
-            transform.position += transform.right * _Axis.x + transform.forward * _Axis.y;
+            transform.position += transform.right * _Axis.x * _speed + transform.forward * _Axis.y * _speed;
         }
         else
         {
@@ -66,9 +67,11 @@ public class PlayerCtl : MonoBehaviour
         {
             Debug.Log("回転");
             Vector3 onPlane = Vector3.ProjectOnPlane(transform.forward * _speed, hit.normal);
+            vec = onPlane;
+
             Debug.Log(onPlane);
-            transform.rotation = Quaternion.LookRotation(transform.forward, onPlane);
-        }
+			transform.rotation = Quaternion.LookRotation(onPlane);
+		}
     }
 
     // Update is called once per frame
@@ -106,6 +109,12 @@ public class PlayerCtl : MonoBehaviour
             Gizmos.color = Color.blue;
             Gizmos.DrawLine(transform.position, transform.position + transform.forward * _distance);
         }
+        Vector3 onPlane = Vector3.ProjectOnPlane(transform.forward * _speed, hit.normal);
+        vec = onPlane;
+
+        Gizmos.color = Color.green;
+        Gizmos.DrawLine(transform.position, (transform.position + 5 * vec));
+
     }
 
 }

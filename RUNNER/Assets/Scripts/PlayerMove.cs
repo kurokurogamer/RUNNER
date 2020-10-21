@@ -14,7 +14,7 @@ public class PlayerMove : MonoBehaviour
     [SerializeField]
     private LayerMask _layerMask = 0;
 
-
+    Vector3 vec = Vector3.zero;
     // Start is called before the first frame update
     void Start()
     {
@@ -48,8 +48,9 @@ public class PlayerMove : MonoBehaviour
         {
             Debug.Log("回転");
             Vector3 onPlane = Vector3.ProjectOnPlane(transform.forward * _speed, hit.normal);
-            Debug.Log(onPlane);
-            transform.rotation = Quaternion.LookRotation(transform.forward, onPlane);
+            Gizmos.DrawLine(transform.position, (transform.position + 5 * onPlane));
+
+            //transform.rotation = Quaternion.LookRotation(transform.forward, onPlane);
         }
     }
 
@@ -87,5 +88,8 @@ public class PlayerMove : MonoBehaviour
 			Gizmos.color = Color.blue;
 			Gizmos.DrawLine(transform.position, transform.position + transform.forward * _distance);
 		}
-	}
+        Gizmos.color = Color.green;
+        Gizmos.DrawLine(transform.position, (transform.position + 5 * vec));
+
+    }
 }
