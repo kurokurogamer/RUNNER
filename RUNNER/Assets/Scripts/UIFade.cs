@@ -50,7 +50,6 @@ public class UIFade : MonoBehaviour
                     }
                 }
             }
-
         }
     }
 
@@ -58,7 +57,6 @@ public class UIFade : MonoBehaviour
 	{
         _animator.SetBool("Fade", true);
         _text.material = null;
-        //_eventObj.SetActive(false);
         for(int i = 0; i < _buttonList.Count; i++)
 		{
             _textList[i].material = null;
