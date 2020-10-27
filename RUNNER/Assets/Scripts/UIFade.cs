@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class UIFade : MonoBehaviour
 {
@@ -11,7 +12,8 @@ public class UIFade : MonoBehaviour
     private Text _text;
     private List<Button> _buttonList = new List<Button>();
     private List<Text> _textList = new List<Text>();
-
+    [SerializeField]
+    private string _name = "";
     [SerializeField]
     private GameObject _eventObj = null;
     // Start is called before the first frame update
@@ -62,6 +64,11 @@ public class UIFade : MonoBehaviour
             _textList[i].material = null;
             _buttonList[i].interactable = false;
 		}
+        if (_name != "")
+        {
+            FadeManager.Instance.LoadScene(_name, 1.0f);
+           // SceneManager.LoadScene(_name);
+        }
     }
 
     // Update is called once per frame
