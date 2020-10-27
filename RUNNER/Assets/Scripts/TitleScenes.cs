@@ -15,7 +15,7 @@ public class TitleScenes : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            SceneManager.LoadScene("GameScene1");
+            SceneCtl.instans.LoadScene("Select");
         }
     }
 }

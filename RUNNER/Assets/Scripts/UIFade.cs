@@ -14,8 +14,6 @@ public class UIFade : MonoBehaviour
     private List<Text> _textList = new List<Text>();
     [SerializeField]
     private string _name = "";
-    [SerializeField]
-    private GameObject _eventObj = null;
     // Start is called before the first frame update
     void Start()
     {
@@ -64,8 +62,7 @@ public class UIFade : MonoBehaviour
 		}
         if (_name != "")
         {
-            FadeManager.Instance.LoadScene(_name, 1.0f);
-           // SceneManager.LoadScene(_name);
+            SceneCtl.instans.LoadSceneAsync(_name);
         }
     }
 
