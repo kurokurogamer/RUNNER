@@ -7,6 +7,7 @@ public class AudioManager : MonoBehaviour
 {
     public static AudioManager instans = null;
 
+    // AudioSource取得変数
     private AudioSource _source;
 
 	private void Awake()
@@ -28,6 +29,7 @@ public class AudioManager : MonoBehaviour
         _source = GetComponent<AudioSource>();
     }
 
+    // SE再生(重複なし)
     public void PlaySE()
 	{
         if (_source.clip == null)
@@ -37,11 +39,13 @@ public class AudioManager : MonoBehaviour
         _source.PlayOneShot(_source.clip);
 	}
 
+    // SE再生(重複なし)
     public void PlaySE(AudioClip clip)
 	{
         _source.PlayOneShot(clip);
     }
 
+    // BGM再生(重複なし)
     public void PlayBGM()
     {
         if (_source.clip == null)
@@ -53,6 +57,7 @@ public class AudioManager : MonoBehaviour
         StartCoroutine(BGM(_source.clip));
     }
 
+    // BGM再生(重複なし)
     public void PlayBGM(AudioClip clip)
     {
         StopAllCoroutines();
@@ -60,6 +65,7 @@ public class AudioManager : MonoBehaviour
         StartCoroutine(BGM(clip));
     }
 
+    // BGMループ(重複なし)
     private IEnumerator BGM(AudioClip clip)
 	{
         while(true)
