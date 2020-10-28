@@ -12,6 +12,8 @@ public class SceneCtl : MonoBehaviour
     [SerializeField]
     private float _fadeTime = 3.0f;
 
+    
+
 	private void Awake()
 	{
 		if(instans == null)
@@ -39,6 +41,7 @@ public class SceneCtl : MonoBehaviour
 		}
         // シーンの切り替え
         // SceneManager.LoadScene(name);
+
         FadeManager.Instance.LoadScene(name, _fadeTime);
 	}
 

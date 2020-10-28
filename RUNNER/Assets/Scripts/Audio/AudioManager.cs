@@ -6,6 +6,7 @@ using UnityEngine.Audio;
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager instans = null;
+   
 
     // AudioSource取得変数
     private AudioSource _source;
@@ -27,6 +28,8 @@ public class AudioManager : MonoBehaviour
 	void Start()
     {
         _source = GetComponent<AudioSource>();
+
+        //PlayBGM(_source.clip);
     }
 
     // SE再生(重複なし)

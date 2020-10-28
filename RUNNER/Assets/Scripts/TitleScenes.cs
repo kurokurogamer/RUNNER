@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class TitleScenes : MonoBehaviour
 {
+    [SerializeField] 
+    private AudioClip clip;
 
     private void Update()
     {
@@ -13,8 +15,11 @@ public class TitleScenes : MonoBehaviour
 
     private void OnClickStartButton()
     {
+
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            AudioManager.instans.PlaySE(clip);
+
             SceneCtl.instans.LoadScene("Select");
         }
     }

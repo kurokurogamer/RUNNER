@@ -1433,6 +1433,10 @@ PrefabInstance:
       propertyPath: _name
       value: GameScene1
       objectReference: {fileID: 0}
+    - target: {fileID: 2664482728011208962, guid: cd9eddc9caf2cf04c9f92c08c113ebda, type: 3}
+      propertyPath: clip
+      value: 
+      objectReference: {fileID: 8300000, guid: c246e1e4e16eb8941b418844b3746bb1, type: 3}
     - target: {fileID: 2664482728138474250, guid: cd9eddc9caf2cf04c9f92c08c113ebda, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1529,6 +1533,10 @@ PrefabInstance:
       propertyPath: _name
       value: Title
       objectReference: {fileID: 0}
+    - target: {fileID: 2664482728391374023, guid: cd9eddc9caf2cf04c9f92c08c113ebda, type: 3}
+      propertyPath: clip
+      value: 
+      objectReference: {fileID: 8300000, guid: c246e1e4e16eb8941b418844b3746bb1, type: 3}
     - target: {fileID: 2664482729327163773, guid: cd9eddc9caf2cf04c9f92c08c113ebda, type: 3}
       propertyPath: name
       value: SampleScene
@@ -1537,6 +1545,10 @@ PrefabInstance:
       propertyPath: _name
       value: SampleScene
       objectReference: {fileID: 0}
+    - target: {fileID: 2664482729327163773, guid: cd9eddc9caf2cf04c9f92c08c113ebda, type: 3}
+      propertyPath: clip
+      value: 
+      objectReference: {fileID: 8300000, guid: c246e1e4e16eb8941b418844b3746bb1, type: 3}
     - target: {fileID: 2664482729788856775, guid: cd9eddc9caf2cf04c9f92c08c113ebda, type: 3}
       propertyPath: name
       value: TestStage
@@ -1545,6 +1557,10 @@ PrefabInstance:
       propertyPath: _name
       value: TestStage
       objectReference: {fileID: 0}
+    - target: {fileID: 2664482729788856775, guid: cd9eddc9caf2cf04c9f92c08c113ebda, type: 3}
+      propertyPath: clip
+      value: 
+      objectReference: {fileID: 8300000, guid: c246e1e4e16eb8941b418844b3746bb1, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cd9eddc9caf2cf04c9f92c08c113ebda, type: 3}
 --- !u!1 &1855366801

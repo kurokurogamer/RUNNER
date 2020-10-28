@@ -14,6 +14,10 @@ public class UIFade : MonoBehaviour
     private List<Text> _textList = new List<Text>();
     [SerializeField]
     private string _name = "";
+
+    [SerializeField]
+    private AudioClip clip;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -57,11 +61,15 @@ public class UIFade : MonoBehaviour
         _text.material = null;
         for(int i = 0; i < _buttonList.Count; i++)
 		{
+            AudioManager.instans.PlaySE(clip);
+
             _textList[i].material = null;
             _buttonList[i].interactable = false;
 		}
         if (_name != "")
         {
+            
+
             SceneCtl.instans.LoadSceneAsync(_name);
         }
     }
