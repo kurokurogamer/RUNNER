@@ -110,6 +110,11 @@ public class FadeManager : MonoBehaviour
 		StartCoroutine (TransScene (scene, interval));
 	}
 
+	public void LoadSceneAysnc(string scene, float interval)
+	{
+		StartCoroutine(TransSceneAsync(scene, interval));
+	}
+
 	/// <summary>
 	/// シーン遷移用コルーチン .
 	/// </summary>
@@ -133,6 +138,45 @@ public class FadeManager : MonoBehaviour
 		time = 0;
 		while (time <= interval) {
 			this.fadeAlpha = Mathf.Lerp (1f, 0f, time / interval);
+			time += Time.deltaTime;
+			yield return 0;
+		}
+
+		this.isFading = false;
+	}
+
+	private IEnumerator TransSceneAsync(string scene, float interval)
+	{
+		//だんだん暗く .
+		this.isFading = true;
+		float time = 0;
+		while (time <= interval)
+		{
+			this.fadeAlpha = Mathf.Lerp(0f, 1f, time / interval);
+			time += Time.deltaTime;
+			yield return 0;
+		}
+		
+		var async = SceneManager.LoadSceneAsync(scene);
+		// シーン遷移の無効化
+		async.allowSceneActivation = false;
+		while (true)
+		{
+			// 読み込み完了したら
+			if (async.progress >= 0.9f)
+			{
+				// シーン読み込み
+				async.allowSceneActivation = true;
+				break;
+			}
+			yield return null;
+		}
+
+		//だんだん明るく .
+		time = 0;
+		while (time <= interval)
+		{
+			this.fadeAlpha = Mathf.Lerp(1f, 0f, time / interval);
 			time += Time.deltaTime;
 			yield return 0;
 		}

@@ -5,15 +5,18 @@ using UnityEngine.SceneManagement;
 
 public class SceneCtl : MonoBehaviour
 {
-    public SceneCtl _instans;
+    public static SceneCtl instans = null;
 
     private Coroutine _coroutin = null;
 
+    [SerializeField]
+    private float _fadeTime = 3.0f;
+
 	private void Awake()
 	{
-		if(_instans == null)
+		if(instans == null)
 		{
-            _instans = this;
+            instans = this;
             DontDestroyOnLoad(this.gameObject);
 		}
         else
@@ -25,9 +28,9 @@ public class SceneCtl : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
     {
-        
     }
 
+    // シーン遷移
     public void LoadScene(string name)
 	{
         if(name == "")
@@ -35,9 +38,11 @@ public class SceneCtl : MonoBehaviour
             return;
 		}
         // シーンの切り替え
-        SceneManager.LoadScene(name);
+        // SceneManager.LoadScene(name);
+        FadeManager.Instance.LoadScene(name, _fadeTime);
 	}
 
+    // シーンの追加
     public void AddScene(string name)
 	{
         if (name == "")
@@ -48,7 +53,7 @@ public class SceneCtl : MonoBehaviour
         SceneManager.LoadScene(name, LoadSceneMode.Additive);
     }
 
-    // 非同期読み込み処理
+    // シーン遷移(非同期読み込み処理)
     public void LoadSceneAsync(string name)
 	{
         if (name == "")
@@ -56,12 +61,15 @@ public class SceneCtl : MonoBehaviour
             return;
         }
         // コルーチンが回っているか調べる
-        if(_coroutin == null)
-		{
-            _coroutin = StartCoroutine(Load());
-		}
+  //      if(_coroutin == null)
+		//{
+  //          _coroutin = StartCoroutine(Load());
+		//}
+        FadeManager.Instance.LoadSceneAysnc(name, _fadeTime);
+
     }
 
+    // シーンの削除
     public void UnLoadScene(string name)
 	{
         if (name == "")
@@ -73,12 +81,16 @@ public class SceneCtl : MonoBehaviour
 
     private IEnumerator Load()
 	{
+
         AsyncOperation async = SceneManager.LoadSceneAsync(name);
+        // シーン遷移の無効化
         async.allowSceneActivation = false;
         while (!async.isDone)
         {
-            if(async.progress > 0.9f)
+            // 読み込みが完了しているか
+            if(async.progress >= 0.9f)
 			{
+                // シーン遷移の有効化
                 async.allowSceneActivation = true;
 			}
             yield return null;
