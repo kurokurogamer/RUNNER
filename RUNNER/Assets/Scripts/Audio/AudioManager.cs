@@ -28,9 +28,11 @@ public class AudioManager : MonoBehaviour
 	void Start()
     {
         _source = GetComponent<AudioSource>();
-
-        //PlayBGM(_source.clip);
-    }
+        if (_source.clip != null)
+        {
+            PlayBGM(_source.clip);
+        }
+	}
 
     // SE再生(重複なし)
     public void PlaySE()
@@ -68,6 +70,12 @@ public class AudioManager : MonoBehaviour
         StartCoroutine(BGM(clip));
     }
 
+    // サウンドの終了処理
+    public void Stop()
+	{
+        _source.Stop();
+	}
+
     // BGMループ(重複なし)
     private IEnumerator BGM(AudioClip clip)
 	{
@@ -77,6 +85,7 @@ public class AudioManager : MonoBehaviour
 			{
                 _source.PlayOneShot(_source.clip);
             }
+            yield return null;
         }
 	}
 
