@@ -43,6 +43,7 @@ public class FadeManager : MonoBehaviour
 	public Color fadeColor = Color.black;
 
 
+
 	public void Awake ()
 	{
 		if (this != Instance) {
@@ -130,6 +131,8 @@ public class FadeManager : MonoBehaviour
 			time += Time.deltaTime;
 			yield return 0;
 		}
+
+		
 
 		//シーン切替 .
 		SceneManager.LoadScene (scene);

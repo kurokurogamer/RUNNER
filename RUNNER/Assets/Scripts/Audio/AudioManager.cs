@@ -83,7 +83,7 @@ public class AudioManager : MonoBehaviour
 		{
             if(_source.isPlaying == false)
 			{
-                _source.PlayOneShot(_source.clip);
+                _source.PlayOneShot(clip);
             }
             yield return null;
         }
