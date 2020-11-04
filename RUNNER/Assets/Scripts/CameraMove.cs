@@ -7,11 +7,20 @@ public class CameraMove : MonoBehaviour
     [SerializeField, Tooltip("ターゲット")]
     private Transform _target = null;
     [SerializeField, Tooltip("カメラの座標")]
-    private Vector3 _offset;
+    private Vector3 _offset = Vector3.zero;
+    [SerializeField]
+    private float _speed = 1.0f;
+    Vector3 rot;
 
     // Start is called before the first frame update
     void Start()
     {
+        rot = transform.eulerAngles;
+    }
+
+    private void Follow()
+    {
+        transform.position = _target.transform.position - transform.forward * _offset.z + transform.up * _offset.y;
     }
 
     private void Rotate()
@@ -33,6 +42,9 @@ public class CameraMove : MonoBehaviour
         {
             transform.RotateAround(_target.position, transform.right, 1f);
         }
+        rot = Vector3.Lerp(rot, _target.transform.eulerAngles, Time.deltaTime * _speed);
+
+        transform.rotation = Quaternion.Euler(_target.transform.eulerAngles);
     }
 
     // Update is called once per frame
@@ -43,6 +55,7 @@ public class CameraMove : MonoBehaviour
 
 	private void LateUpdate()
 	{
+        Follow();
 		Rotate();
 	}
 }
