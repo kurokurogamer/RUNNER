@@ -16,13 +16,16 @@ public class PlayerCtl : MonoBehaviour
 
     // 入力情報
     private Vector2 _Axis;
-    Vector3 vec = Vector3.zero;
+    private Vector3 vec = Vector3.zero;
+    private Camera _camera;
 
     // Start is called before the first frame update
     void Start()
     {
+        _camera = Camera.main.GetComponent<Camera>();
         _blur = Camera.main.GetComponent<RadialBlur>();
     }
+
 
     private void MoveCheck()
 	{
@@ -50,7 +53,8 @@ public class PlayerCtl : MonoBehaviour
         if (_Axis.x != 0 || _Axis.y != 0)
         {
             _blur.Strength = Mathf.MoveTowards(_blur.Strength, 0.2f, Time.deltaTime);
-            transform.position += transform.right * _Axis.x * _speed + transform.forward * _Axis.y * _speed;
+            transform.position += transform.right * _Axis.x *_speed + transform.forward * _Axis.y * _speed;
+            //transform.position += transform.right * _Axis.x * _speed + transform.forward * _Axis.y * _speed;
         }
         else
         {
@@ -61,16 +65,19 @@ public class PlayerCtl : MonoBehaviour
     private void Rotate()
 	{
         RaycastHit hit;
+        //transform.rotation = Quaternion.Euler(new Vector3(0, _camera.transform.eulerAngles.y, 0));
         var isHit = Physics.Raycast(transform.position, -transform.up, out hit, _distance, _layerMask, QueryTriggerInteraction.Ignore);
 
         if (isHit)
         {
             Debug.Log("回転");
-            Vector3 onPlane = Vector3.ProjectOnPlane(transform.forward * _speed, hit.normal);
+            Vector3 onPlane = Vector3.ProjectOnPlane(Vector3.up, hit.normal);
+            transform.rotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
+            transform.position = hit.point + transform.up;
             vec = onPlane;
-
+            Debug.Log(hit.normal);
             Debug.Log(onPlane);
-			transform.rotation = Quaternion.LookRotation(onPlane);
+			//transform.rotation = Quaternion.LookRotation(onPlane);
 		}
     }
 
@@ -92,6 +99,7 @@ public class PlayerCtl : MonoBehaviour
         {
             Gizmos.color = Color.red;
             Gizmos.DrawLine(transform.position, transform.position + -transform.up * hit.distance);
+            Debug.Log(hit.normal);
         }
         else
         {
