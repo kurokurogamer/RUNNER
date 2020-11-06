@@ -9,7 +9,8 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float RunSpeed;
     private Animator animator;
-
+    [SerializeField]
+    private int _hp = 3;
 
     // Start is called before the first frame update
     void Start()
@@ -17,6 +18,7 @@ public class Player : MonoBehaviour
         characterController = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
     }
+
 
     // Update is called once per frame
     void Update()
@@ -77,6 +79,43 @@ public class Player : MonoBehaviour
             }
         }
 
+        var clipInfo = animator.GetCurrentAnimatorClipInfo(0)[0];
+        if(clipInfo.clip.name == "DAMAGED01")
+        {
+            var info = animator.GetCurrentAnimatorStateInfo(0);
+            if (_hp <= 0)
+            {
+                if (info.normalizedTime >= 0.5f)
+                {
+                    animator.speed = 0;
+                }
+            }
+            else
+            {
+                if (info.normalizedTime >= 1.0f)
+                {
+                    animator.Play("Wait");
+                }
+            }
+
+        }
         Debug.Log(animator.GetFloat("Speed"));
+    }
+    public void Damege()
+    {
+        animator.Play("Deth");
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Enemy")
+        {
+            Damege();
+            bool isReady = animator.GetCurrentAnimatorStateInfo(0).shortNameHash.Equals(Animator.StringToHash("Deth"));
+            if (!isReady)
+            {
+                _hp--;
+            }
+        }
     }
 }

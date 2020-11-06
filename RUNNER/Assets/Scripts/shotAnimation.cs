@@ -5,6 +5,11 @@ using UnityEngine;
 public class shotAnimation : MonoBehaviour
 {
     private Animator animator;
+    private float _nowTime = 0.0f;
+    [SerializeField]
+    private GameObject _bullet = null;
+    [SerializeField]
+    private GameObject ShotPoint;
   
     // Start is called before the first frame update
     void Start()
@@ -15,7 +20,7 @@ public class shotAnimation : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        _nowTime += Time.deltaTime;
     }
 
     private void OnTriggerStay(Collider other)
@@ -23,7 +28,12 @@ public class shotAnimation : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             transform.LookAt(other.transform);
-            animator.SetBool("shot", true);
+            if(_bullet != null && ShotPoint != null &&_nowTime >= 3.0f)
+            {
+                animator.SetBool("shot", true);
+                _nowTime = 0.0f;
+                Instantiate(_bullet, ShotPoint.transform.position, transform.rotation);
+            }
         }
     }
 

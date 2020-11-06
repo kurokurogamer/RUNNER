@@ -4,19 +4,26 @@ using UnityEngine;
 
 public class Sphereenemy : MonoBehaviour
 {
-    Vector3 rot = Vector3.zero;
+	private Rigidbody _rigid;
+    private Animator anim;
+
     float rotSpeed = 40f;
     [SerializeField]
     private float _walkSpeed = 1.0f;
-    Animator anim;
+	Vector3 rot = Vector3.zero;
     float nowTime;
-	bool isRedy = false;
+	bool isReady = false;
 
 	// Use this for initialization
 	void Awake()
     {
-        anim = gameObject.GetComponent<Animator>();
-        gameObject.transform.eulerAngles = rot;
+		_rigid = GetComponent<Rigidbody>();
+		foreach(Transform child in transform)
+		{
+			anim = child.GetComponent<Animator>();
+		}
+
+		gameObject.transform.eulerAngles = rot;
     }
 
 
@@ -35,10 +42,15 @@ public class Sphereenemy : MonoBehaviour
 		{
 			anim.SetBool("Walk_Anim", true);
 			Debug.Log("test");
-			transform.root.position += transform.forward * Time.deltaTime * _walkSpeed;
+			bool ready = anim.GetCurrentAnimatorStateInfo(0).shortNameHash.Equals(Animator.StringToHash("anim_Walk_Loop"));
+			if (ready)
+			{
+				_rigid.velocity = transform.forward * _walkSpeed;
+			}
+
+			// transform.position += transform.forward * Time.deltaTime * _walkSpeed;
 		}
 		//CheckKey();
-		gameObject.transform.eulerAngles = rot;
 	}
 
 	private void OnTriggerEnter(Collider other)
@@ -49,6 +61,7 @@ public class Sphereenemy : MonoBehaviour
 			anim.SetBool("Walk_Anim", false);
 
 			anim.SetBool("Roll_Anim", true);
+			_rigid.velocity = Vector3.zero;
 		}
 	}
 
@@ -57,11 +70,12 @@ public class Sphereenemy : MonoBehaviour
 		if (other.tag == "Player")
 		{
 			transform.LookAt(other.transform);
-			isRedy = anim.GetCurrentAnimatorStateInfo(0).shortNameHash.Equals(Animator.StringToHash("cloed_Roll_Loop"));
-			Debug.Log(isRedy);
-			if (isRedy)
+			isReady = anim.GetCurrentAnimatorStateInfo(0).shortNameHash.Equals(Animator.StringToHash("cloed_Roll_Loop"));
+			Debug.Log(isReady);
+			if (isReady)
 			{
-				transform.root.position += transform.forward * Time.deltaTime * _walkSpeed * 2;
+				Debug.Log(_rigid.velocity);
+				_rigid.velocity = transform.forward * _walkSpeed * 2;
 			}
 		}
 	}
@@ -69,6 +83,17 @@ public class Sphereenemy : MonoBehaviour
 	private void OnTriggerExit(Collider other)
 	{
 		if (other.tag == "Player")
+		{
+			anim.SetBool("Roll_Anim", false);
+		}
+
+	}
+
+	private void OnCollisionEnter(Collision collision)
+	{
+		Debug.LogError("当たったぞ！");
+
+		if (collision.gameObject.tag == "Player")
 		{
 			anim.SetBool("Roll_Anim", false);
 		}
