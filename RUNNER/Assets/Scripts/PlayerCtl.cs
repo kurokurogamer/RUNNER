@@ -81,6 +81,12 @@ public class PlayerCtl : MonoBehaviour
 		}
     }
 
+    private void FlontRayCheck()
+	{
+        RaycastHit hit;
+        var isHit = Physics.Raycast(transform.position + transform.forward, -transform.up, out hit, _distance, _layerMask, QueryTriggerInteraction.Ignore);
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -99,7 +105,6 @@ public class PlayerCtl : MonoBehaviour
         {
             Gizmos.color = Color.red;
             Gizmos.DrawLine(transform.position, transform.position + -transform.up * hit.distance);
-            Debug.Log(hit.normal);
         }
         else
         {
@@ -123,6 +128,12 @@ public class PlayerCtl : MonoBehaviour
         Gizmos.color = Color.green;
         Gizmos.DrawLine(transform.position, (transform.position + 5 * vec));
 
+        var transF = Physics.Raycast(transform.position + transform.forward, -transform.up, out hit, _distance, _layerMask, QueryTriggerInteraction.Ignore);
+        if(transF)
+		{
+            Gizmos.color = Color.red;
+            Gizmos.DrawLine(transform.position + transform.forward, transform.position + transform.forward + -transform.up * hit.distance);
+        }
     }
 
 }

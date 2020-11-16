@@ -61,7 +61,7 @@ public class UIFade : MonoBehaviour
         _text.material = null;
         for(int i = 0; i < _buttonList.Count; i++)
 		{
-            AudioManager.instans.PlaySE(clip);
+            AudioManager.instans.PlayOneSE(clip);
 
             _textList[i].material = null;
             _buttonList[i].interactable = false;

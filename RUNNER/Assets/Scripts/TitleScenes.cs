@@ -18,7 +18,7 @@ public class TitleScenes : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            AudioManager.instans.PlaySE(clip);
+            AudioManager.instans.PlayOneSE(clip);
 
             SceneCtl.instans.LoadScene("Select");
         }
