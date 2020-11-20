@@ -38,7 +38,7 @@ public class DebugGizmos : MonoBehaviour
     {
         if(_meshFilter)
 		{
-            if(Mode)
+            if(_editMode)
 			{
                 _renderer.enabled = true;
 			}

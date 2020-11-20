@@ -27,7 +27,7 @@ public class EnemySearch : MonoBehaviour
     private List<GameObject> _pointList = new List<GameObject>();
     private int _listCount;
     // オブジェクトを有効化した瞬間にアニメーションを再生するスクリプト
-    private AutoAnimObj _autoAnimObj;
+    //private AutoAnimObj _autoAnimObj;
     // アイコンオブジェクト
     private GameObject _icon = null;
     // 現在の経過時間
@@ -54,7 +54,7 @@ public class EnemySearch : MonoBehaviour
 		_target = null;
         _listCount = 0;
         _nowSecondTime = 0.0f;
-        _nowSearchTime = 0.0f;
+        _nowSearchTime = 3.0f;
         _agent = GetComponent<NavMeshAgent>();
         _sphere = GetComponent<SphereCollider>();
         // 初期化時に目標地点を設定しておく
@@ -72,8 +72,11 @@ public class EnemySearch : MonoBehaviour
 		if (_nowSearchTime >= 3.0f)
 		{
             Patrol();
-            //_icon.SetActive(false);
-        }
+            if (_icon)
+            {
+                _icon.SetActive(false);
+            }
+		}
 
         // ターゲットが存在してないならスキップする
         if (_target == null)
@@ -99,18 +102,32 @@ public class EnemySearch : MonoBehaviour
                 Debug.Log("壁が間にない");
                 // ターゲットを目標地点に設定する
                 _agent.SetDestination(_target.transform.position);
-                // 索敵されたので初回発見時のアニメーションをセットする
-                _autoAnimObj.stateName = "Fade";
-                // エフェクトオブジェクトを有効化
-                //_icon.SetActive(true);
+                // 初回発見時のアニメーションをセットする
+                //_autoAnimObj.stateName = "Fade";
+				// エフェクトオブジェクトを有効化
+                if(_icon)
+				{
+                    _icon.SetActive(true);
+                }
                 // 音声の再生
-                AudioManager.instans.PlayOneSE(_enemyDate.clip);
+                if (_enemyDate.clip != null)
+                {
+                    AudioManager.instans.PlayOneSE(_enemyDate.clip);
+                }
             }
             else
 			{
-                // 違う場合は壁か角度内にいないのでサーチ再計算を始める
+                // 違う場合は壁か角度内にいないのでパトロールに戻るための時間を計る
                 _nowSearchTime += Time.deltaTime;
             }
+        }
+    }
+
+    private void Contact()
+    {
+        if (Physics.Raycast(transform.position, transform.up, out RaycastHit hit, 5, 0, QueryTriggerInteraction.Ignore))
+        {
+
         }
     }
 
@@ -123,10 +140,6 @@ public class EnemySearch : MonoBehaviour
         if (_nowSecondTime >= _enemyDate.secondTime)
         {
             _agent.SetDestination(_pointList[_listCount].transform.position);
-            if (_listCount >= _pointList.Count)
-            {
-                _listCount = 0;
-            }
         }
 
         Debug.Log("パトロール中");
@@ -143,7 +156,7 @@ public class EnemySearch : MonoBehaviour
         }
 
 		//	Quaternion targetRot = Quaternion.LookRotation(_pointList[_listCount].transform.position - transform.position);
-		//	// プレイヤーの回転
+		//	// 回転処理
 		//	transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRot, _enemyDate.speed);
 	}
 
@@ -151,19 +164,21 @@ public class EnemySearch : MonoBehaviour
     void Update()
     {
         Follow();
-        //_icon.transform.rotation = Quaternion.Euler(30, 45, 0);
+        if (_icon)
+        {
+            _icon.transform.rotation = Quaternion.Euler(30, 45, 0);
+        }
     }
 
 	private void OnTriggerEnter(Collider other)
 	{
+
+        Debug.Log(other.name);
         if (other.tag == "Player")
         {
             Vector3 hitPos = other.ClosestPointOnBounds(transform.position);
-
-            Debug.Log("範囲外に移動");
-
             // アニメーションセット
-            _autoAnimObj.stateName = "Fade";
+            //_autoAnimObj.stateName = "Fade";
 			//_icon.SetActive(true);
 
             _target = other.gameObject;

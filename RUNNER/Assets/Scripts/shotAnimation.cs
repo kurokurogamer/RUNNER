@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class shotAnimation : MonoBehaviour
+public class ShotAnimation : MonoBehaviour
 {
     private Animator animator;
     private float _nowTime = 0.0f;

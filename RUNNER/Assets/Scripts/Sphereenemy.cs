@@ -2,17 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Sphereenemy : MonoBehaviour
+public class SphereEnemy : MonoBehaviour
 {
 	private Rigidbody _rigid;
-    private Animator anim;
+    private Animator _anim;
 
-    float rotSpeed = 40f;
-    [SerializeField]
+    [SerializeField, Tooltip("歩行速度")]
     private float _walkSpeed = 1.0f;
-	Vector3 rot = Vector3.zero;
-    float nowTime;
-	bool isReady = false;
+	private Vector3 _rot;
+    private float _nowTime;
+	private bool _isReady;
 
 	// Use this for initialization
 	void Awake()
@@ -20,47 +19,51 @@ public class Sphereenemy : MonoBehaviour
 		_rigid = GetComponent<Rigidbody>();
 		foreach(Transform child in transform)
 		{
-			anim = child.GetComponent<Animator>();
+			_anim = child.GetComponent<Animator>();
 		}
 
-		gameObject.transform.eulerAngles = rot;
+		transform.eulerAngles = _rot;
     }
 
 
 	private void Start()
 	{
-		nowTime = 0;
+		_nowTime = 0;
+		_isReady = false;
 	}
-	// Update is called once per frame
-	void Update()
+
+	private void Walk()
 	{
-		if (anim.GetBool("Roll_Anim") == false)
+		if (_anim.GetBool("Roll_Anim") == false)
 		{
-			nowTime += Time.deltaTime;
+			_nowTime += Time.deltaTime;
 		}
-		if (nowTime > 3.0f)
+		if (_nowTime > 3.0f)
 		{
-			anim.SetBool("Walk_Anim", true);
-			Debug.Log("test");
-			bool ready = anim.GetCurrentAnimatorStateInfo(0).shortNameHash.Equals(Animator.StringToHash("anim_Walk_Loop"));
+			_anim.SetBool("Walk_Anim", true);
+			bool ready = _anim.GetCurrentAnimatorStateInfo(0).shortNameHash.Equals(Animator.StringToHash("anim_Walk_Loop"));
 			if (ready)
 			{
 				_rigid.velocity = transform.forward * _walkSpeed;
 			}
-
-			// transform.position += transform.forward * Time.deltaTime * _walkSpeed;
 		}
-		//CheckKey();
+	}
+
+
+	// Update is called once per frame
+	void Update()
+	{
+		Walk();
 	}
 
 	private void OnTriggerEnter(Collider other)
 	{
 		if (other.tag == "Player")
 		{
-			nowTime = 0;
-			anim.SetBool("Walk_Anim", false);
-
-			anim.SetBool("Roll_Anim", true);
+			_nowTime = 0;
+			_anim.SetBool("Walk_Anim", false);
+			_anim.SetBool("Roll_Anim", true);
+			// 敵が範囲内に入ったので加速度をリセット
 			_rigid.velocity = Vector3.zero;
 		}
 	}
@@ -70,32 +73,46 @@ public class Sphereenemy : MonoBehaviour
 		if (other.tag == "Player")
 		{
 			transform.LookAt(other.transform);
-			isReady = anim.GetCurrentAnimatorStateInfo(0).shortNameHash.Equals(Animator.StringToHash("cloed_Roll_Loop"));
-			Debug.Log(isReady);
-			if (isReady)
+			if (_anim.GetCurrentAnimatorStateInfo(0).shortNameHash.Equals(Animator.StringToHash("cloed_Roll_Loop")))
 			{
-				Debug.Log(_rigid.velocity);
-				_rigid.velocity = transform.forward * _walkSpeed * 2;
+				// 自身の正面方向を得る
+				Vector3 forward = transform.forward;
+				// 空中を移動できるわけではないのでY軸の移動量を消す
+				forward = new Vector3(forward.x, 0, forward.z);
+				// 得られたベクトルを単位ベクトルにすることで2次元の移動量を算出
+				_rigid.velocity = forward.normalized * _walkSpeed * 2;
 			}
 		}
+
+		transform.position += transform.right * 1 * 10 + transform.forward * 1 * 10;
+
+		RaycastHit hit;
+		var isHit = Physics.Raycast(transform.position, -transform.up, out hit, 100, 1, QueryTriggerInteraction.Ignore);
+
+		if (isHit)
+		{
+			Debug.Log("回転");
+			Vector3 onPlane = Vector3.ProjectOnPlane(Vector3.up, hit.normal);
+			transform.rotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
+			transform.position = hit.point + transform.up;
+		}
+
 	}
 
 	private void OnTriggerExit(Collider other)
 	{
 		if (other.tag == "Player")
 		{
-			anim.SetBool("Roll_Anim", false);
+			_anim.SetBool("Roll_Anim", false);
 		}
 
 	}
 
 	private void OnCollisionEnter(Collision collision)
 	{
-		Debug.LogError("当たったぞ！");
-
 		if (collision.gameObject.tag == "Player")
 		{
-			anim.SetBool("Roll_Anim", false);
+			_anim.SetBool("Roll_Anim", false);
 		}
 	}
 }

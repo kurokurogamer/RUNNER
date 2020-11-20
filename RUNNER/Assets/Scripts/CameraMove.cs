@@ -44,8 +44,8 @@ public class CameraMove : MonoBehaviour
         }
         rot = Vector3.Lerp(rot, _target.transform.eulerAngles, Time.deltaTime * _speed);
 
-        transform.rotation = Quaternion.Euler(_target.transform.eulerAngles);
-    }
+		transform.rotation = Quaternion.Euler(_target.transform.eulerAngles);
+	}
 
     // Update is called once per frame
     void Update()
@@ -54,6 +54,12 @@ public class CameraMove : MonoBehaviour
     }
 
 	private void LateUpdate()
+	{
+  //      Follow();
+		//Rotate();
+	}
+
+	private void FixedUpdate()
 	{
         Follow();
 		Rotate();

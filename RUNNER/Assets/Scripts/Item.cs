@@ -2,22 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ItemManeger : MonoBehaviour
+public class Item : MonoBehaviour
 {
-
-    private void OnTriggerEnter(Collider other)
-    {
-        Debug.Log("hit");
-
-        //Objectを取得
-        if (other.tag == "Player")
-        {
-            //Objectを消す
-            Destroy(gameObject);
-        }
-
-    }
-
     // Start is called before the first frame update
     void Start()
     {
@@ -30,5 +16,16 @@ public class ItemManeger : MonoBehaviour
         transform.Rotate(new Vector3(45, 15, 45) * Time.deltaTime);
 
        
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        //Objectを取得
+        if (other.tag == "Player")
+        {
+            Debug.Log("アイテムの取得");
+            //Objectを消す
+            Destroy(gameObject);
+        }
     }
 }

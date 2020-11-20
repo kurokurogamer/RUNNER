@@ -4,19 +4,17 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    private CharacterController characterController;
-    private Vector3 velocity;
-    [SerializeField]
-    private float RunSpeed;
     private Animator animator;
     [SerializeField]
     private int _hp = 3;
 
+    private Vector2 _Axis;
+
     // Start is called before the first frame update
     void Start()
     {
-        characterController = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
+        _Axis = Vector2.zero;
     }
 
 
@@ -28,35 +26,44 @@ public class Player : MonoBehaviour
 
     bool InputCheck()
     {
-        bool isret = false;
-        if (Input.GetKey(KeyCode.UpArrow))
-        {
-            transform.position += transform.forward * Time.deltaTime * 3.0f;
-            isret = true;
-        }
-        else if(Input.GetKey(KeyCode.DownArrow))
-        {
-            transform.position -= transform.forward * Time.deltaTime * 3.0f;
-            isret = true;
-        }
+        _Axis = Vector2.zero;
+        _Axis.x = Input.GetAxis("Horizontal");
+        _Axis.y = Input.GetAxis("Vertical");
+
+        // 左右判定
         if (Input.GetKey(KeyCode.LeftArrow))
         {
-            transform.position -= transform.right * Time.deltaTime * 3.0f;
+            _Axis.x = -1;
             animator.SetFloat("Curve", 1.0f);
-            isret = true;
         }
-        else if(Input.GetKey(KeyCode.RightArrow))
+        else if (Input.GetKey(KeyCode.RightArrow))
         {
-            transform.position += transform.right * Time.deltaTime * 3.0f;
+            _Axis.x = -1;
             animator.SetFloat("Curve", -1.0f);
-            isret = true;
         }
         else
-        {
+		{
             animator.SetFloat("Curve", 0);
         }
 
-        return isret;
+        // 上下判定
+        if (Input.GetKey(KeyCode.UpArrow))
+        {
+            _Axis.y = -1;
+        }
+        else if (Input.GetKey(KeyCode.DownArrow))
+        {
+            _Axis.y = 1;
+        }
+
+        if(_Axis.x != 0 || _Axis.y != 0)
+		{
+            return true;
+		}
+        else
+		{
+            return false;
+		}
     }
 
     void UnityChanAnimation()

@@ -63,12 +63,12 @@ public class SceneCtl : MonoBehaviour
         {
             return;
         }
-        // コルーチンが回っているか調べる
-  //      if(_coroutin == null)
+		// コルーチンが回っているか調べる
+		//if (_coroutin == null)
 		//{
-  //          _coroutin = StartCoroutine(Load());
+		//	_coroutin = StartCoroutine(Load());
 		//}
-        FadeManager.Instance.LoadSceneAysnc(name, _fadeTime);
+		FadeManager.Instance.LoadSceneAysnc(name, _fadeTime);
 
     }
 
