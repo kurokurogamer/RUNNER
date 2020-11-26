@@ -91,8 +91,6 @@ public class Sphereenemy : MonoBehaviour
 
 	private void OnCollisionEnter(Collision collision)
 	{
-		Debug.LogError("当たったぞ！");
-
 		if (collision.gameObject.tag == "Player")
 		{
 			anim.SetBool("Roll_Anim", false);

@@ -27,7 +27,7 @@ public class EnemySearch : MonoBehaviour
     private List<GameObject> _pointList = new List<GameObject>();
     private int _listCount;
     // オブジェクトを有効化した瞬間にアニメーションを再生するスクリプト
-    private AutoAnimObj _autoAnimObj;
+    //private AutoAnimObj _autoAnimObj;
     // アイコンオブジェクト
     private GameObject _icon = null;
     // 現在の経過時間
@@ -100,7 +100,7 @@ public class EnemySearch : MonoBehaviour
                 // ターゲットを目標地点に設定する
                 _agent.SetDestination(_target.transform.position);
                 // 索敵されたので初回発見時のアニメーションをセットする
-                _autoAnimObj.stateName = "Fade";
+                //_autoAnimObj.stateName = "Fade";
                 // エフェクトオブジェクトを有効化
                 //_icon.SetActive(true);
                 // 音声の再生
@@ -163,7 +163,7 @@ public class EnemySearch : MonoBehaviour
             Debug.Log("範囲外に移動");
 
             // アニメーションセット
-            _autoAnimObj.stateName = "Fade";
+            //_autoAnimObj.stateName = "Fade";
 			//_icon.SetActive(true);
 
             _target = other.gameObject;
