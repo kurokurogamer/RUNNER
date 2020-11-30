@@ -11,11 +11,13 @@ public class CameraMove : MonoBehaviour
     [SerializeField]
     private float _speed = 1.0f;
     Vector3 rot;
+    private Vector2 _axis;
 
     // Start is called before the first frame update
     void Start()
     {
         rot = transform.eulerAngles;
+        _axis = Vector2.zero;
     }
 
     private void Follow()
@@ -25,26 +27,52 @@ public class CameraMove : MonoBehaviour
 
     private void Rotate()
     {
-        // 右回転
-        if (Input.GetKey(KeyCode.Z))
-        {
-            transform.RotateAround(_target.position, Vector3.up, 1f);
-        }
-        else if (Input.GetKey(KeyCode.X))
-        {
-            transform.RotateAround(_target.position, Vector3.up, -1f);
-        }
-        if (Input.GetKey(KeyCode.C))
-        {
-            transform.RotateAround(_target.position, transform.right, -1f);
-        }
-        else if (Input.GetKey(KeyCode.V))
-        {
-            transform.RotateAround(_target.position, transform.right, 1f);
-        }
-        rot = Vector3.Lerp(rot, _target.transform.eulerAngles, Time.deltaTime * _speed);
+        _axis = Vector2.zero;
+        _axis.x = Input.GetAxis("HorizontalRight");
+        _axis.y = Input.GetAxis("VerticalRight");
 
-		transform.rotation = Quaternion.Euler(_target.transform.eulerAngles);
+        if (Input.GetKey(KeyCode.Alpha4))
+        {
+            _axis.x = -1;
+        }
+        else if (Input.GetKey(KeyCode.Alpha6))
+        {
+            _axis.x = -1;
+        }
+        if (Input.GetKey(KeyCode.Alpha8))
+        {
+            _axis.y = -1;
+        }
+        else if (Input.GetKey(KeyCode.Alpha2))
+        {
+            _axis.y = 1;
+        }
+
+        // Y軸回転
+        transform.RotateAround(_target.position, Vector3.up, _axis.x);
+
+        // X軸回転
+		//transform.RotateAround(_target.position, transform.right, _axis.y);
+
+		//// 右回転
+		//if (Input.GetKey(KeyCode.Z))
+		//{
+		//}
+		//else if (Input.GetKey(KeyCode.X))
+		//{
+		//    transform.RotateAround(_target.position, Vector3.up, -1f);
+		//}
+		//if (Input.GetKey(KeyCode.C))
+		//{
+		//    transform.RotateAround(_target.position, transform.right, -1f);
+		//}
+		//else if (Input.GetKey(KeyCode.V))
+		//{
+		//    transform.RotateAround(_target.position, transform.right, 1f);
+		//}
+		//rot = Vector3.Lerp(rot, _target.transform.eulerAngles, Time.deltaTime * _speed);
+
+		//transform.rotation = Quaternion.Euler(_target.transform.eulerAngles);
 	}
 
     // Update is called once per frame

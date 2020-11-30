@@ -31,12 +31,12 @@ public class Player : MonoBehaviour
         _Axis.y = Input.GetAxis("Vertical");
 
         // 左右判定
-        if (Input.GetKey(KeyCode.LeftArrow))
+        if (Input.GetKey(KeyCode.LeftArrow) || Input.GetAxis("HorizontalRight") < 0.0f)
         {
             _Axis.x = -1;
             animator.SetFloat("Curve", 1.0f);
         }
-        else if (Input.GetKey(KeyCode.RightArrow))
+        else if (Input.GetKey(KeyCode.RightArrow) || Input.GetAxis("HorizontalRight") > 0.0f)
         {
             _Axis.x = -1;
             animator.SetFloat("Curve", -1.0f);
@@ -72,7 +72,7 @@ public class Player : MonoBehaviour
         animator.SetBool("Brake", false);
         if (InputCheck())
         {
-            if (Input.GetKey(KeyCode.Z))
+            if (Input.GetKey(KeyCode.Space) || Input.GetButton("Fire2"))
             {
                 animator.SetFloat("Speed", 0.6f);
             }
@@ -80,7 +80,7 @@ public class Player : MonoBehaviour
             {
                 animator.SetFloat("Speed", 0.2f);
             }
-            if(Input.GetKey(KeyCode.X))
+            if(Input.GetKey(KeyCode.X) || Input.GetButton("Fire3"))
             {
                 animator.SetBool("Brake", true);
             }

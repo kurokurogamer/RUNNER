@@ -10,16 +10,38 @@ public class ShotAnimation : MonoBehaviour
     private GameObject _bullet = null;
     [SerializeField]
     private GameObject ShotPoint;
+    private EnemySearch _search;
+    private GameObject _player;
   
     // Start is called before the first frame update
     void Start()
     {
         animator = GetComponent<Animator>();
+        _search = transform.parent.GetComponent<EnemySearch>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if(_search._sati)
+		{
+            if (_search._target != null)
+            {
+                transform.LookAt(_search._target.transform);
+                if (_bullet != null && ShotPoint != null && _nowTime >= 0.5f)
+                {
+                    animator.SetBool("shot", true);
+                    _nowTime = 0.0f;
+                    GameObject obj = Instantiate(_bullet, ShotPoint.transform.position, transform.rotation);
+                    obj.transform.LookAt(_search._target.transform);
+
+                }
+            }
+        }
+        else
+		{
+            animator.SetBool("shot", false);
+        }
         _nowTime += Time.deltaTime;
     }
 
@@ -27,13 +49,6 @@ public class ShotAnimation : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            transform.LookAt(other.transform);
-            if(_bullet != null && ShotPoint != null &&_nowTime >= 3.0f)
-            {
-                animator.SetBool("shot", true);
-                _nowTime = 0.0f;
-                Instantiate(_bullet, ShotPoint.transform.position, transform.rotation);
-            }
         }
     }
 
@@ -41,7 +56,7 @@ public class ShotAnimation : MonoBehaviour
     {     
         if (other.CompareTag("Player"))
         {
-            animator.SetBool("shot",false);
+            //animator.SetBool("shot",false);
         }
     }
 }

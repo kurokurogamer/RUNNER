@@ -16,7 +16,7 @@ public class TitleScenes : MonoBehaviour
     private void OnClickStartButton()
     {
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) || Input.GetButtonDown("Fire1"))
         {
             AudioManager.instans.PlayOneSE(clip);
 

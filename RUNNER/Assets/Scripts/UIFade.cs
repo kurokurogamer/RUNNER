@@ -68,8 +68,6 @@ public class UIFade : MonoBehaviour
 		}
         if (_name != "")
         {
-            
-
             SceneCtl.instans.LoadSceneAsync(_name);
         }
     }

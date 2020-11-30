@@ -35,10 +35,12 @@ public class EnemySearch : MonoBehaviour
     // 継続サーチ時間
     private float _nowSearchTime;
     // 追従対象保存変数
-    private GameObject _target;
+    public GameObject _target;
     private NavMeshAgent _agent;
     // 円弧表示に使用するradius取得用
     private SphereCollider _sphere;
+
+    public bool _sati = false;
 
     // Start is called before the first frame update
     void Start()
@@ -104,8 +106,11 @@ public class EnemySearch : MonoBehaviour
                 _agent.SetDestination(_target.transform.position);
                 // 初回発見時のアニメーションをセットする
                 //_autoAnimObj.stateName = "Fade";
-				// エフェクトオブジェクトを有効化
-                if(_icon)
+                // エフェクトオブジェクトを有効化
+                _agent.stoppingDistance = 15;
+                _sati = true;
+
+                if (_icon)
 				{
                     _icon.SetActive(true);
                 }
@@ -119,6 +124,7 @@ public class EnemySearch : MonoBehaviour
 			{
                 // 違う場合は壁か角度内にいないのでパトロールに戻るための時間を計る
                 _nowSearchTime += Time.deltaTime;
+                _sati = false;
             }
         }
     }
@@ -144,7 +150,7 @@ public class EnemySearch : MonoBehaviour
 
         Debug.Log("パトロール中");
         // ナビゲート対象に近づいた時点で更新する
-        if (Vector3.Distance(transform.position, _pointList[_listCount].transform.position) <= 1.0f)
+        if (Vector3.Distance(transform.position, _pointList[_listCount].transform.position) <= 20.0f)
         {
             Debug.Log("次の目標地点に移動します。");
             _listCount++;
@@ -191,7 +197,9 @@ public class EnemySearch : MonoBehaviour
 		{
             _target = null;
             Debug.Log("範囲外に移動");
-		}
+            _agent.stoppingDistance = 0;
+
+        }
 	}
 
     // デバック表示:ビルド時は必要のないメソッドなので処理をスキップするようにする
@@ -204,8 +212,8 @@ public class EnemySearch : MonoBehaviour
             _sphere = GetComponent<SphereCollider>();
         }
         // 円弧描画処理
-        Handles.color = _color;
-        Handles.DrawSolidArc(transform.position, Vector3.up, Quaternion.Euler(0f, -_enemyDate.searchAngle, 0f) * transform.forward, _enemyDate.searchAngle * 2f, _sphere.radius);
+        //Handles.color = _color;
+        //Handles.DrawSolidArc(transform.position, Vector3.up, Quaternion.Euler(0f, -_enemyDate.searchAngle, 0f) * transform.forward, _enemyDate.searchAngle * 2f, _sphere.radius);
         //Handles.color = _color2;
         //Handles.DrawSolidArc(transform.position, Vector3.up, Quaternion.Euler(0f, -_enemyDate.searchAngle, 0f) * transform.forward, _enemyDate.searchAngle * 2f, _sphere.radius * 0.7f);
 

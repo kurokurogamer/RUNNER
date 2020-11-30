@@ -57,28 +57,30 @@ public class PlayerCtl : MonoBehaviour
 		}
         if (_Axis.x != 0 || _Axis.y != 0)
         {
-           if (Input.GetKey(KeyCode.Z))
+            if (Input.GetKey(KeyCode.Space) || Input.GetButton("Fire2"))
             {
-                _rigid.velocity = transform.right * _Axis.x * _speed * 7 + transform.forward * _Axis.y * _speed * 7;
+                _rigid.velocity = /*_camera.transform.right * _Axis.x * _speed * 7 +*/ _camera.transform.forward * _Axis.y * _speed * 5;
                 _animator.speed = 2;
                 _blur.Strength = Mathf.MoveTowards(_blur.Strength, 0.2f, Time.deltaTime);
             }
             else
             {
-                _rigid.velocity = transform.right * _Axis.x * _speed + transform.forward * _Axis.y * _speed;
+                _rigid.velocity = _camera.transform.right * _Axis.x * _speed + _camera.transform.forward * _Axis.y * _speed;
                 _animator.speed = 1;
                 _blur.Strength = Mathf.MoveTowards(_blur.Strength, 0.0f, Time.deltaTime);
             }
+            _rigid.velocity = new Vector3(_rigid.velocity.x, 0, _rigid.velocity.z);
         }
         else
         {
-			_rigid.velocity -= transform.up;
-			_blur.Strength = Mathf.MoveTowards(_blur.Strength, 0, Time.deltaTime);
+            _rigid.velocity -= transform.up;
+            _blur.Strength = Mathf.MoveTowards(_blur.Strength, 0, Time.deltaTime);
         }
     }
 
     private void Rotate()
 	{
+        transform.rotation = Quaternion.Euler(0, _camera.transform.eulerAngles.y, 0);
 		if (Physics.Raycast(transform.position, -transform.up, out RaycastHit hit, _distance, _layerMask, QueryTriggerInteraction.Ignore))
 		{
 			//Vector3 onPlane = Vector3.ProjectOnPlane(Vector3.up, hit.normal);
